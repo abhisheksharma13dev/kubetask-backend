@@ -1,0 +1,38 @@
+name: Local CD Pipeline - kubetask-backend
+
+on:
+  workflow_run:
+    workflows: ["CI Pipeline - kubetask-backend"]
+    types:
+      - completed
+
+jobs:
+  deploy:
+     runs-on: ubuntu-latest
+
+     steps:
+       - name: Checkout code
+         uses: actions/checkout@v3
+
+       - name: Set up Docker
+         uses: docker/setup-buildx-action@v3
+
+       - name: Set up kubectl
+         uses: azure/setup-kubectl@v3
+         with:
+           version: 'latest'
+
+    
+       - name: Pull backend Docker image
+         run: docker pull abhishekdev13/kubetask-backend:proplayer
+
+       - name: Deploy backend to Minikube
+         run: |
+          kubectl apply -f k8s/backend-deployment.yaml
+          kubectl rollout status deployment/backend-deployment
+
+          - name: Get backend service URL
+            run: minikube service backend-service --url
+
+
+
