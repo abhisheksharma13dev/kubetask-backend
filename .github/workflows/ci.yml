@@ -28,4 +28,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: yourusername/yourapp:latest
+          tags: abhishekdev13/kubetask-backend
